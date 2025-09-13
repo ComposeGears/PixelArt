@@ -15,7 +15,6 @@ fun PixelTheme(content: @Composable () -> Unit) {
     }
 }
 
-
 @Composable
 fun NavigationPreview(destination: NavDestination<*>) {
     Navigation(

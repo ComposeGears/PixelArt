@@ -32,11 +32,6 @@ import pixelart.composeapp.generated.resources.Res
 import pixelart.composeapp.generated.resources.frame_0
 import kotlin.math.roundToInt
 
-data class GridSizeArgs(
-    val width: Int,
-    val height: Int
-)
-
 val PixelDrawingScreen by navDestination<GridSizeArgs> {
     val navController = navController()
     val navArgs = navArgs()
@@ -136,3 +131,8 @@ val PixelDrawingScreen by navDestination<GridSizeArgs> {
         }
     }
 }
+
+data class GridSizeArgs(
+    val width: Int,
+    val height: Int
+)

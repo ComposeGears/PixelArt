@@ -1,21 +1,12 @@
 package io.github.composegears.pixelart.screen
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -33,7 +24,8 @@ val IntroScreen by navDestination {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
         var width by rememberSaveable { mutableStateOf("24") }
         var height by rememberSaveable { mutableStateOf("24") }
@@ -79,7 +71,8 @@ val IntroScreen by navDestination {
                     entry = PixelDrawingScreen,
                     navArgs = GridSizeArgs(
                         width = width.toInt(),
-                        height = height.toInt())
+                        height = height.toInt()
+                    )
                 )
             }
         ) {
@@ -88,9 +81,7 @@ val IntroScreen by navDestination {
     }
 }
 
-private fun String.isValidInput(max: Int = 2048): Boolean {
-    return all { it.isDigit() } && (toIntOrNull() ?: 0) <= max
-}
+private fun String.isValidInput(max: Int = 2048) = all { it.isDigit() } && toInt() <= max
 
 @Preview
 @Composable

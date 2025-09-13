@@ -1,3 +1,5 @@
+@file:Suppress("Filename")
+
 package io.github.composegears.pixelart
 
 import androidx.compose.ui.window.Window
