@@ -5,7 +5,7 @@ android-minSdk = "24"
 android-targetSdk = "36"
 
 detekt = "1.23.8"
-kotlin = "2.2.10"
+kotlin = "2.2.20"
 
 [libraries]
 androidx-activity-compose = "androidx.activity:activity-compose:1.11.0"
