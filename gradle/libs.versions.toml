@@ -7,7 +7,9 @@ android-targetSdk = "36"
 kotlin = "2.2.10"
 
 [libraries]
-androidx-activity-compose = "androidx.activity:activity-compose:1.10.1"
+androidx-activity-compose = "androidx.activity:activity-compose:1.11.0"
+tiamat = "io.github.composegears:tiamat:2.0.0-alpha03"
+zoomable = "net.engawapg.lib:zoomable:2.8.1"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

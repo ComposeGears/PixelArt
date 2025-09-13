@@ -26,17 +26,22 @@ kotlin {
     }
 
     sourceSets {
-        androidMain.dependencies {
-            implementation(compose.preview)
-            implementation(libs.androidx.activity.compose)
-        }
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
+            implementation(compose.materialIconsExtended)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+
+            implementation(libs.tiamat)
+            implementation(libs.zoomable)
+        }
+        androidMain.dependencies {
+            implementation(libs.androidx.activity.compose)
+
+            implementation(compose.preview)
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
