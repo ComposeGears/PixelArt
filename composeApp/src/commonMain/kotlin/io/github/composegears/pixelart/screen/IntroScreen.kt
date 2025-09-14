@@ -1,90 +1,84 @@
 package io.github.composegears.pixelart.screen
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.composegears.tiamat.compose.navController
 import com.composegears.tiamat.compose.navDestination
 import com.composegears.tiamat.compose.navigate
-import io.github.composegears.pixelart.NavigationPreview
-import io.github.composegears.pixelart.PixelTheme
+import io.github.composegears.pixelart.ui.common.PixelTheme
+import io.github.composegears.pixelart.ui.icons.DocumentScanner
+import io.github.composegears.pixelart.ui.icons.Draw
+import io.github.composegears.pixelart.ui.icons.PixelArtIcons
+import io.github.composegears.pixelart.ui.util.TiamatDestinationPreview
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 val IntroScreen by navDestination {
     val navController = navController()
 
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        var width by rememberSaveable { mutableStateOf("24") }
-        var height by rememberSaveable { mutableStateOf("24") }
-
-        val enabled by remember {
-            derivedStateOf {
-                width.isNotEmpty() && height.isNotEmpty()
-            }
-        }
-
-        OutlinedTextField(
-            value = width,
-            label = {
-                Text(text = "Width")
-            },
-            onValueChange = { input ->
-                if (input.isValidInput()) {
-                    width = input
-                }
-            },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        CardRow(
+            imageVector = PixelArtIcons.Draw,
+            title = "New project",
+            description = "Empty canvas",
+            onClick = { navController.navigate(GridSetupScreen) }
         )
-        OutlinedTextField(
-            value = height,
-            label = {
-                Text(text = "Height")
-            },
-            singleLine = true,
-            onValueChange = { input ->
-                if (input.isValidInput()) {
-                    height = input
-                }
-            },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        Spacer(modifier = Modifier.height(16.dp))
+        CardRow(
+            imageVector = PixelArtIcons.DocumentScanner,
+            title = "Import from Gif",
+            description = "Import frames from a GIF file",
+            onClick = { navController.navigate(GifPickerScreen) }
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedButton(
-            modifier = Modifier,
-            enabled = enabled,
-            onClick = {
-                navController.navigate(
-                    entry = PixelDrawingScreen,
-                    navArgs = GridSizeArgs(
-                        width = width.toInt(),
-                        height = height.toInt()
-                    )
-                )
-            }
+    }
+}
+
+@Composable
+private fun CardRow(
+    imageVector: ImageVector,
+    title: String,
+    description: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier
+            .widthIn(min = 300.dp, max = 300.dp)
+            .heightIn(max = 72.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        onClick = onClick
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Generate PixelGrid")
+            Icon(
+                imageVector = imageVector,
+                contentDescription = null
+            )
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(text = title, style = MaterialTheme.typography.titleSmall)
+                Text(text = description, style = MaterialTheme.typography.bodySmall)
+            }
         }
     }
 }
 
-private fun String.isValidInput(max: Int = 2048) = all { it.isDigit() } && toInt() <= max
-
 @Preview
 @Composable
 private fun IntroScreenPreview() = PixelTheme {
-    NavigationPreview(IntroScreen)
+    TiamatDestinationPreview(IntroScreen)
 }

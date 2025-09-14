@@ -35,7 +35,11 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
 
+            implementation(libs.filekit.core)
+            implementation(libs.filekit.dialogs.compose)
+            implementation(libs.gifkt)
             implementation(libs.tiamat)
+            implementation(libs.skiko)
             implementation(libs.zoomable)
         }
         androidMain.dependencies {
@@ -88,6 +92,10 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "io.github.composegears.pixelart"
             packageVersion = "1.0.0"
+
+            linux {
+                modules("jdk.security.auth")
+            }
         }
     }
 }
