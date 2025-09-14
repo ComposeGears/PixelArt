@@ -39,7 +39,6 @@ kotlin {
             implementation(libs.filekit.dialogs.compose)
             implementation(libs.gifkt)
             implementation(libs.tiamat)
-            implementation(libs.skiko)
             implementation(libs.zoomable)
         }
         androidMain.dependencies {
