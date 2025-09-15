@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -25,9 +26,12 @@ import com.composegears.tiamat.compose.back
 import com.composegears.tiamat.compose.navArgs
 import com.composegears.tiamat.compose.navController
 import com.composegears.tiamat.compose.navDestination
+import io.github.composegears.pixelart.ui.common.PixelTheme
+import io.github.composegears.pixelart.ui.util.TiamatDestinationPreview
 import net.engawapg.lib.zoomable.rememberZoomState
 import net.engawapg.lib.zoomable.zoomable
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import pixelart.composeapp.generated.resources.Res
 import pixelart.composeapp.generated.resources.frame_0
 import kotlin.math.roundToInt
@@ -136,3 +140,12 @@ data class GridSizeArgs(
     val width: Int,
     val height: Int
 )
+
+@Preview
+@Composable
+private fun PixelDrawingScreenPreview() = PixelTheme {
+    TiamatDestinationPreview(
+        destination = PixelDrawingScreen,
+        navArgs = GridSizeArgs(32, 32)
+    )
+}

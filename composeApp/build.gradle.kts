@@ -27,6 +27,8 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(projects.gifCompose)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
@@ -35,6 +37,9 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
 
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.filekit.core)
+            implementation(libs.filekit.dialogs)
             implementation(libs.tiamat)
             implementation(libs.zoomable)
         }
@@ -44,7 +49,12 @@ kotlin {
             implementation(compose.preview)
         }
         jvmMain.dependencies {
+            implementation(libs.skiko)
+            implementation(libs.kotlinx.coroutines.swing)
             implementation(compose.desktop.currentOs)
+        }
+        wasmJsMain.dependencies {
+            implementation(libs.skiko)
         }
     }
 }
@@ -63,6 +73,8 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "LICENSE-EDL-1.0.txt"
+            excludes += "LICENSE-EPL-1.0.txt"
         }
     }
     buildTypes {
@@ -88,6 +100,10 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "io.github.composegears.pixelart"
             packageVersion = "1.0.0"
+
+            linux {
+                modules("jdk.security.auth")
+            }
         }
     }
 }
