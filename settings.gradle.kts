@@ -30,3 +30,4 @@ dependencyResolutionManagement {
 rootProject.name = "PixelArt"
 
 include(":composeApp")
+include(":gif-compose")
