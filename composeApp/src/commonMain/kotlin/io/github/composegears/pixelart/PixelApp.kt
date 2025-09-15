@@ -8,6 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.composegears.tiamat.compose.Navigation
 import com.composegears.tiamat.compose.rememberNavController
+import io.github.composegears.pixelart.screen.GifPickerScreen
+import io.github.composegears.pixelart.screen.GridSetupScreen
 import io.github.composegears.pixelart.screen.IntroScreen
 import io.github.composegears.pixelart.screen.PixelDrawingScreen
 
@@ -23,6 +25,8 @@ fun PixelApp() = MaterialTheme(colorScheme = darkColorScheme()) {
             navController = navController,
             destinations = arrayOf(
                 IntroScreen,
+                GifPickerScreen,
+                GridSetupScreen,
                 PixelDrawingScreen
             ),
         )
