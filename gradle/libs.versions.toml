@@ -4,11 +4,24 @@ android-compileSdk = "36"
 android-minSdk = "24"
 android-targetSdk = "36"
 
+coroutines = "1.10.2"
 detekt = "1.23.8"
+filekit = "0.11.0"
 kotlin = "2.2.20"
+skiko = "0.9.24"
 
 [libraries]
 androidx-activity-compose = "androidx.activity:activity-compose:1.11.0"
+androidx-core = "androidx.core:core-ktx:1.17.0"
+
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "coroutines" }
+
+filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekit" }
+filekit-dialogs = { module = "io.github.vinceglb:filekit-dialogs", version.ref = "filekit" }
+
+gifkt = "com.shakster:gifkt:0.1.2"
+skiko = { module = "org.jetbrains.skiko:skiko", version.ref = "skiko" }
 tiamat = "io.github.composegears:tiamat:2.0.0-alpha03"
 zoomable = "net.engawapg.lib:zoomable:2.8.1"
 
