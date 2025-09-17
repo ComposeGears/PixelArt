@@ -3,10 +3,12 @@ package io.github.composegears.pixelart.screen
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.composegears.tiamat.compose.TiamatPreview
 import com.composegears.tiamat.compose.navController
 import com.composegears.tiamat.compose.navDestination
 import com.composegears.tiamat.compose.navigate
@@ -14,11 +16,18 @@ import io.github.composegears.pixelart.ui.common.PixelTheme
 import io.github.composegears.pixelart.ui.icons.DocumentScanner
 import io.github.composegears.pixelart.ui.icons.Draw
 import io.github.composegears.pixelart.ui.icons.PixelArtIcons
-import io.github.composegears.pixelart.ui.util.TiamatDestinationPreview
+import io.github.vinceglb.filekit.FileKit
+import io.github.vinceglb.filekit.dialogs.FileKitType
+import io.github.vinceglb.filekit.dialogs.openFilePicker
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 val IntroScreen by navDestination {
     val navController = navController()
+
+    val coroutineScope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -38,7 +47,17 @@ val IntroScreen by navDestination {
             imageVector = PixelArtIcons.DocumentScanner,
             title = "Import from Gif",
             description = "Import frames from a GIF file",
-            onClick = { navController.navigate(GifPickerScreen) }
+            onClick = {
+                coroutineScope.launch {
+                    withContext(Dispatchers.Default) {
+                        val gifFile = FileKit.openFilePicker(type = FileKitType.File(extensions = listOf("gif")))
+
+                        withContext(Dispatchers.Main) {
+                            navController.navigate(entry = GifGridSetup, navArgs = gifFile)
+                        }
+                    }
+                }
+            }
         )
     }
 }
@@ -84,5 +103,5 @@ private fun CardRow(
 @Preview
 @Composable
 private fun IntroScreenPreview() = PixelTheme {
-    TiamatDestinationPreview(IntroScreen)
+    TiamatPreview(IntroScreen)
 }

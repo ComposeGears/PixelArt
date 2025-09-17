@@ -22,12 +22,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.sp
-import com.composegears.tiamat.compose.back
-import com.composegears.tiamat.compose.navArgs
-import com.composegears.tiamat.compose.navController
-import com.composegears.tiamat.compose.navDestination
+import com.composegears.tiamat.compose.*
 import io.github.composegears.pixelart.ui.common.PixelTheme
-import io.github.composegears.pixelart.ui.util.TiamatDestinationPreview
 import net.engawapg.lib.zoomable.rememberZoomState
 import net.engawapg.lib.zoomable.zoomable
 import org.jetbrains.compose.resources.painterResource
@@ -144,7 +140,7 @@ data class GridSizeArgs(
 @Preview
 @Composable
 private fun PixelDrawingScreenPreview() = PixelTheme {
-    TiamatDestinationPreview(
+    TiamatPreview(
         destination = PixelDrawingScreen,
         navArgs = GridSizeArgs(32, 32)
     )
