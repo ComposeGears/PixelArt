@@ -25,6 +25,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.composegears.tiamat.compose.back
 import com.composegears.tiamat.compose.navArgs
 import com.composegears.tiamat.compose.navController
@@ -34,6 +37,11 @@ import com.shakster.gifkt.ImageFrame
 import io.github.composegears.pixelart.gif.compose.toImageBitmap
 import io.github.vinceglb.filekit.PlatformFile
 import io.github.vinceglb.filekit.readBytes
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -41,15 +49,11 @@ val GifGridSetup by navDestination<PlatformFile> {
     val navController = navController()
     val file = navArgs()
 
-    val images by produceState(emptyList()) {
-        val decoder = GifDecoder(file.readBytes())
-        value = decoder.asList()
-        decoder.close()
-    }
+    val viewModel = viewModel { GifGridSetupViewModel(file) }
+    val images by viewModel.frames.collectAsState()
+
     if (images.isNotEmpty()) {
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
+        Column(modifier = Modifier.fillMaxSize()) {
             IconButton(onClick = navController::back) {
                 Icon(
                     imageVector = Icons.Default.Close,
@@ -57,22 +61,21 @@ val GifGridSetup by navDestination<PlatformFile> {
                 )
             }
 
-            var selectedFrame by remember(images) { mutableStateOf(images.firstOrNull()) }
+            var selectedFrame by remember(images) { mutableStateOf(images.first()) }
             var text by remember { mutableStateOf("") }
+
             Box(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
             ) {
-                selectedFrame?.let { imageFrame ->
-                    Image(
-                        modifier = Modifier
-                            .size(300.dp)
-                            .align(Alignment.Center),
-                        bitmap = imageFrame.toImageBitmap(),
-                        contentDescription = null
-                    )
-                }
+                Image(
+                    modifier = Modifier
+                        .size(300.dp)
+                        .align(Alignment.Center),
+                    bitmap = selectedFrame.toImageBitmap(),
+                    contentDescription = null
+                )
                 Text(text = text)
             }
 
@@ -159,6 +162,28 @@ private fun PixelGrid(
                         )
                     }
                 }
+            }
+        }
+    }
+}
+
+class GifGridSetupViewModel(
+    private val file: PlatformFile
+) : ViewModel() {
+
+    private val _frames = MutableStateFlow(emptyList<ImageFrame>())
+    val frames = _frames.asStateFlow()
+
+    init {
+        extractFrames()
+    }
+
+    private fun extractFrames() {
+        viewModelScope.launch(Dispatchers.Default) {
+            val decoder = GifDecoder(file.readBytes())
+
+            decoder.use {
+                _frames.update { decoder.asList() }
             }
         }
     }
