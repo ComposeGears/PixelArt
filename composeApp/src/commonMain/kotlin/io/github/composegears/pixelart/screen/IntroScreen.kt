@@ -52,8 +52,10 @@ val IntroScreen by navDestination {
                     withContext(Dispatchers.Default) {
                         val gifFile = FileKit.openFilePicker(type = FileKitType.File(extensions = listOf("gif")))
 
-                        withContext(Dispatchers.Main) {
-                            navController.navigate(entry = GifGridSetup, navArgs = gifFile)
+                        if (gifFile != null) {
+                            withContext(Dispatchers.Main) {
+                                navController.navigate(entry = GifGridSetup, navArgs = gifFile)
+                            }
                         }
                     }
                 }
