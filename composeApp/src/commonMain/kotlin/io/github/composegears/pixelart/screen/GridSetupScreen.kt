@@ -11,11 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.composegears.tiamat.compose.TiamatPreview
 import com.composegears.tiamat.compose.navController
 import com.composegears.tiamat.compose.navDestination
 import com.composegears.tiamat.compose.replace
 import io.github.composegears.pixelart.ui.common.PixelTheme
-import io.github.composegears.pixelart.ui.util.TiamatDestinationPreview
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 val GridSetupScreen by navDestination {
@@ -86,5 +86,5 @@ private fun String.isValidInput(max: Int = 2048) = all { it.isDigit() } && toInt
 @Preview
 @Composable
 private fun GridSetupScreenPreview() = PixelTheme {
-    TiamatDestinationPreview(GridSetupScreen)
+    TiamatPreview(GridSetupScreen)
 }
