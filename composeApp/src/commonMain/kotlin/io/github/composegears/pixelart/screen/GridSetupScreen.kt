@@ -16,6 +16,7 @@ import com.composegears.tiamat.compose.navController
 import com.composegears.tiamat.compose.navDestination
 import com.composegears.tiamat.compose.replace
 import io.github.composegears.pixelart.ui.common.PixelTheme
+import io.github.composegears.pixelart.ui.layout.VerticalSpacer
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 val GridSetupScreen by navDestination {
@@ -62,7 +63,7 @@ val GridSetupScreen by navDestination {
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        VerticalSpacer(8.dp)
         OutlinedButton(
             modifier = Modifier,
             enabled = enabled,

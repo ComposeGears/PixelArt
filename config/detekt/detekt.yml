@@ -1155,7 +1155,7 @@ Compose:
   RememberMissing:
     active: true
   UnstableCollections:
-    active: true
+    active: false
   ViewModelForwarding:
     active: true
   ViewModelInjection:

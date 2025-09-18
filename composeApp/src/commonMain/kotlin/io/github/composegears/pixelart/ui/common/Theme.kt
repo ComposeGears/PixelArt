@@ -13,6 +13,7 @@ fun PixelTheme(content: @Composable () -> Unit) {
             primary = Color(0xFF1E66D6),
             onPrimary = Color.White,
             surface = Color(0xFF1E1F22),
+            outlineVariant = Color(0xff393b40),
             surfaceTint = Color.Gray,
         )
     ) {
