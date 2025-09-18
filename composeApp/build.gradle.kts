@@ -37,6 +37,7 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
 
+            implementation(libs.compose.material3.adaptive)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.filekit.core)
             implementation(libs.filekit.dialogs)
