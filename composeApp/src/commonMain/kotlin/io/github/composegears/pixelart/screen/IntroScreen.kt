@@ -16,6 +16,7 @@ import io.github.composegears.pixelart.ui.common.PixelTheme
 import io.github.composegears.pixelart.ui.icons.DocumentScanner
 import io.github.composegears.pixelart.ui.icons.Draw
 import io.github.composegears.pixelart.ui.icons.PixelArtIcons
+import io.github.composegears.pixelart.ui.layout.VerticalSpacer
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.dialogs.FileKitType
 import io.github.vinceglb.filekit.dialogs.openFilePicker
@@ -42,7 +43,7 @@ val IntroScreen by navDestination {
             description = "Empty canvas",
             onClick = { navController.navigate(GridSetupScreen) }
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        VerticalSpacer(16.dp)
         CardRow(
             imageVector = PixelArtIcons.DocumentScanner,
             title = "Import from Gif",
