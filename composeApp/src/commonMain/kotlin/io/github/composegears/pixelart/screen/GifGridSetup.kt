@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -40,6 +41,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import net.engawapg.lib.zoomable.rememberZoomState
+import net.engawapg.lib.zoomable.zoomable
 import kotlin.math.roundToInt
 
 val GifGridSetup by navDestination<PlatformFile> {
@@ -154,7 +157,9 @@ private fun FrameGrid(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier.size(width = frame.width.dp, height = frame.height.dp),
+        modifier = modifier
+            .clipToBounds()
+            .zoomable(rememberZoomState()),
         contentAlignment = Alignment.Center
     ) {
         PixelGrid(
@@ -164,7 +169,7 @@ private fun FrameGrid(
         )
         Image(
             modifier = Modifier
-                .matchParentSize()
+                .requiredSize(width = frame.width.dp, height = frame.height.dp)
                 .align(Alignment.Center),
             bitmap = rememberImageFrameBitmap(frame),
             contentDescription = null
