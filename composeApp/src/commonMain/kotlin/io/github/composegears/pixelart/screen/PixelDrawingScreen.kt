@@ -12,7 +12,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -23,6 +22,7 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.sp
 import com.composegears.tiamat.compose.*
+import com.shakster.gifkt.ImageFrame
 import io.github.composegears.pixelart.ui.common.PixelTheme
 import net.engawapg.lib.zoomable.rememberZoomState
 import net.engawapg.lib.zoomable.zoomable
@@ -32,7 +32,7 @@ import pixelart.composeapp.generated.resources.Res
 import pixelart.composeapp.generated.resources.frame_0
 import kotlin.math.roundToInt
 
-val PixelDrawingScreen by navDestination<GridSizeArgs> {
+val PixelDrawingScreen by navDestination<PixelDrawArgs> {
     val navController = navController()
     val navArgs = navArgs()
 
@@ -43,7 +43,6 @@ val PixelDrawingScreen by navDestination<GridSizeArgs> {
                 contentDescription = null
             )
         }
-        Text("width=${navArgs.width}, height=${navArgs.height}")
 
         Column(
             modifier = Modifier
@@ -132,16 +131,30 @@ val PixelDrawingScreen by navDestination<GridSizeArgs> {
     }
 }
 
-data class GridSizeArgs(
-    val width: Int,
-    val height: Int
-)
+sealed interface PixelDrawArgs {
+    data class NewProjectArgs(
+        val pixelSize: Int,
+        val width: Int,
+        val height: Int
+    ) : PixelDrawArgs
+
+    data class GifImportArgs(
+        val pixelSize: Int,
+        val width: Int,
+        val height: Int,
+        val frames: List<ImageFrame>,
+    ) : PixelDrawArgs
+}
 
 @Preview
 @Composable
 private fun PixelDrawingScreenPreview() = PixelTheme {
     TiamatPreview(
         destination = PixelDrawingScreen,
-        navArgs = GridSizeArgs(32, 32)
+        navArgs = PixelDrawArgs.NewProjectArgs(
+            pixelSize = 2,
+            width = 32,
+            height = 32
+        )
     )
 }
