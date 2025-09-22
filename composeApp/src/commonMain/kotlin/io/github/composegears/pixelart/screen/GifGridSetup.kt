@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -22,7 +21,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
 import com.composegears.tiamat.compose.*
 import com.shakster.gifkt.GifDecoder
 import com.shakster.gifkt.ImageFrame
@@ -30,6 +28,7 @@ import io.github.composegears.pixelart.core.rememberMutableState
 import io.github.composegears.pixelart.gif.compose.rememberImageFrameBitmap
 import io.github.composegears.pixelart.screen.PixelDrawArgs.GifImportArgs
 import io.github.composegears.pixelart.screen.State.GifGridSetupState
+import io.github.composegears.pixelart.ui.AdaptiveLayout
 import io.github.composegears.pixelart.ui.AppHeader
 import io.github.composegears.pixelart.ui.PixelGrid
 import io.github.composegears.pixelart.ui.common.PixelTheme
@@ -83,89 +82,139 @@ private fun GifGridSetupUI(
     onBack: () -> Unit,
     openDrawing: (GifImportArgs) -> Unit
 ) {
-    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     val frames = state.frames
 
     Box(modifier = Modifier.fillMaxSize()) {
         var selectedFrame by rememberMutableState(frames) { frames.first() }
         var pixelSize by rememberMutableState { 8f }
 
-        if (windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND)) {
-            Row(modifier = Modifier.fillMaxSize()) {
-                VerticalFrames(
-                    frames = frames,
+        AdaptiveLayout(
+            phone = {
+                PhoneLayout(
+                    state = state,
                     selectedFrame = selectedFrame,
-                    onSelect = { selectedFrame = it }
+                    pixelSize = pixelSize,
+                    onPixelSizeChange = { pixelSize = it },
+                    onSelectFrame = { selectedFrame = it },
+                    onBack = onBack,
+                    openDrawing = openDrawing
                 )
-                VerticalDivider()
-                Column {
-                    AppHeader(
-                        title = "GIF pixel size",
-                        onBack = onBack
-                    )
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
-                    ) {
-                        WeightSpacer()
-                        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                            Column(
-                                modifier = Modifier.padding(16.dp),
-                                verticalArrangement = Arrangement.spacedBy(8.dp),
-                            ) {
-                                FrameGrid(
-                                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                                    frame = selectedFrame,
-                                    pixelSize = pixelSize
-                                )
-                                VerticalSpacer(16.dp)
-                                Text(
-                                    modifier = Modifier.padding(horizontal = 4.dp),
-                                    text = "Adjust the slider to find real GIF pixel size",
-                                    overflow = TextOverflow.Ellipsis,
-                                    maxLines = 1
-                                )
-                                SliderSection(
-                                    modifier = Modifier.widthIn(max = 400.dp),
-                                    pixelSize = pixelSize,
-                                    onSizeChange = { pixelSize = it }
-                                )
-                                Button(
-                                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                                    onClick = {
-                                        openDrawing(
-                                            GifImportArgs(
-                                                pixelSize = pixelSize.roundToInt(),
-                                                width = state.width,
-                                                height = state.height,
-                                                frames = frames
-                                            )
-                                        )
-                                    }
-                                ) {
-                                    Text(
-                                        text = "Continue",
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
-                                }
-                            }
-                        }
-                        WeightSpacer()
+            },
+            tablet = {
+                TabletLayout(
+                    state = state,
+                    selectedFrame = selectedFrame,
+                    pixelSize = pixelSize,
+                    onPixelSizeChange = { pixelSize = it },
+                    onSelectFrame = { selectedFrame = it },
+                    onBack = onBack,
+                    openDrawing = openDrawing
+                )
+            }
+        )
+    }
+}
+
+@Composable
+private fun PhoneLayout(
+    state: GifGridSetupState,
+    selectedFrame: ImageFrame,
+    pixelSize: Float,
+    onPixelSizeChange: (Float) -> Unit,
+    onSelectFrame: (ImageFrame) -> Unit,
+    onBack: () -> Unit,
+    openDrawing: (GifImportArgs) -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
+        AppHeader(
+            title = "GIF pixel size",
+            onBack = onBack
+        )
+        WeightSpacer()
+        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                FrameGrid(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    frame = selectedFrame,
+                    pixelSize = pixelSize
+                )
+                VerticalSpacer(16.dp)
+                Text(
+                    modifier = Modifier.padding(horizontal = 4.dp),
+                    text = "Adjust the slider to find real GIF pixel size",
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
+                )
+                SliderSection(
+                    modifier = Modifier.widthIn(max = 400.dp),
+                    pixelSize = pixelSize,
+                    onSizeChange = onPixelSizeChange
+                )
+                Button(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    onClick = {
+                        openDrawing(
+                            GifImportArgs(
+                                pixelSize = pixelSize.roundToInt(),
+                                width = state.width,
+                                height = state.height,
+                                frames = state.frames
+                            )
+                        )
                     }
+                ) {
+                    Text(
+                        text = "Continue",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
             }
-        } else {
+        }
+        WeightSpacer()
+        HorizontalDivider()
+        HorizontalFrames(
+            frames = state.frames,
+            selectedFrame = selectedFrame,
+            onSelect = onSelectFrame
+        )
+    }
+}
+
+@Composable
+private fun TabletLayout(
+    state: GifGridSetupState,
+    selectedFrame: ImageFrame,
+    pixelSize: Float,
+    onPixelSizeChange: (Float) -> Unit,
+    onSelectFrame: (ImageFrame) -> Unit,
+    onBack: () -> Unit,
+    openDrawing: (GifImportArgs) -> Unit,
+) {
+    Row(modifier = Modifier.fillMaxSize()) {
+        VerticalFrames(
+            frames = state.frames,
+            selectedFrame = selectedFrame,
+            onSelect = onSelectFrame
+        )
+        VerticalDivider()
+        Column {
+            AppHeader(
+                title = "GIF pixel size",
+                onBack = onBack
+            )
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
             ) {
-                AppHeader(
-                    title = "GIF pixel size",
-                    onBack = onBack
-                )
                 WeightSpacer()
                 Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     Column(
@@ -187,7 +236,7 @@ private fun GifGridSetupUI(
                         SliderSection(
                             modifier = Modifier.widthIn(max = 400.dp),
                             pixelSize = pixelSize,
-                            onSizeChange = { pixelSize = it }
+                            onSizeChange = onPixelSizeChange
                         )
                         Button(
                             modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -197,7 +246,7 @@ private fun GifGridSetupUI(
                                         pixelSize = pixelSize.roundToInt(),
                                         width = state.width,
                                         height = state.height,
-                                        frames = frames
+                                        frames = state.frames
                                     )
                                 )
                             }
@@ -211,12 +260,6 @@ private fun GifGridSetupUI(
                     }
                 }
                 WeightSpacer()
-                HorizontalDivider()
-                HorizontalFrames(
-                    frames = frames,
-                    selectedFrame = selectedFrame,
-                    onSelect = { selectedFrame = it }
-                )
             }
         }
     }
