@@ -29,6 +29,9 @@ kotlin {
             implementation(compose.ui)
             api(libs.gifkt)
         }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+        }
         androidMain.dependencies {
             implementation(libs.androidx.core)
         }
