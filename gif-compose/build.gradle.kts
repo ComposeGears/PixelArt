@@ -29,20 +29,6 @@ kotlin {
             implementation(compose.ui)
             api(libs.gifkt)
         }
-        androidMain.dependencies {
-            implementation(libs.androidx.core)
-        }
-
-        val nonAndroid by creating {
-            dependsOn(commonMain.get())
-
-            dependencies {
-                implementation(libs.skiko)
-            }
-        }
-
-        jvmMain.get().dependsOn(nonAndroid)
-        wasmJsMain.get().dependsOn(nonAndroid)
     }
 }
 

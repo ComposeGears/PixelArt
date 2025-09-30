@@ -50,12 +50,8 @@ kotlin {
             implementation(compose.preview)
         }
         jvmMain.dependencies {
-            implementation(libs.skiko)
             implementation(libs.kotlinx.coroutines.swing)
             implementation(compose.desktop.currentOs)
-        }
-        wasmJsMain.dependencies {
-            implementation(libs.skiko)
         }
     }
 }
