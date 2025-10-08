@@ -13,7 +13,7 @@ kotlin = "2.2.20"
 androidx-activity-compose = "androidx.activity:activity-compose:1.11.0"
 androidx-core = "androidx.core:core-ktx:1.17.0"
 
-compose-material3-adaptive = "org.jetbrains.compose.material3.adaptive:adaptive:1.2.0-alpha06"
+compose-material3-adaptive = "org.jetbrains.compose.material3.adaptive:adaptive:1.2.0-alpha07"
 
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "coroutines" }
